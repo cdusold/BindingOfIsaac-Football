@@ -1,0 +1,3 @@
+<items gfxroot="gfx/items/" version="1">
+  <passive cache="tearflag range" name="Football" description="American Soccer?" gfx="football.png" />
+</items>
