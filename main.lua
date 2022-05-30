@@ -135,9 +135,12 @@ function SportsballMod:PostUpdate()
 					--Guarantee one bounce
 					tearData.Bounces = -1
 				end
-				tearSprite.Rotation = entity.Velocity:GetAngleDegrees() + 90.0
+				local rotation = entity.Velocity:GetAngleDegrees() + 90.0
+				tearData.Rotation = 0
+				tear.SpriteRotation = tearData.Rotation + rotation
 				tearData.FootballBounced = false
 				tearData.Spin = 1
+				tearSprite.Rotation = tearData.Rotation + rotation
 				if tearData.BounceType ~= nil then
 					tearData.BounceType = tearData.BounceType | BounceId.FOOTBALL
 				else
@@ -147,7 +150,7 @@ function SportsballMod:PostUpdate()
 
 			--code to implement bounces
 			if tearData.Bounces ~= nil then
-				tearData.Bouncing = false
+				tearData.Bouncing = tearData.Bounced
 				--on ANY kind of bounce, increase the counter.
 				--if tearData.BounceType > 0
 				--and tear:CollidesWithGrid() --TODO get entity bounces.
@@ -195,13 +198,18 @@ function SportsballMod:PostUpdate()
 					--Isaac.DebugString(entity.Velocity.Y)
 					--Isaac.DebugString(tear.FallingSpeed)
 
-					tear.FootballBounced = true
+					tearData.FootballBounced = true
 					tearData.Spin = -tearData.Spin
 				end
 
 				--Spin football
-				if tear.FootballBounced and tear.Variant == TearBallId.FOOTBALL then
-					tearSprite.Rotation = tearSprite.Rotation + 10.0 * tearData.Spin
+				if tear.Variant == TearBallId.FOOTBALL then
+					local rotation = entity.Velocity:GetAngleDegrees() + 90.0
+					if tearData.FootballBounced and tear.Variant == TearBallId.FOOTBALL then
+						tearData.Rotation = tearData.Rotation + 10.0 * tearData.Spin
+					end
+					tear.SpriteRotation = tearData.Rotation + rotation
+					tearSprite.Rotation = tearData.Rotation + rotation
 				end
 			end
 		end
